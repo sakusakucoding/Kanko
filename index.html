@@ -4,46 +4,58 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ニッポン観光ランキング</title>
-  <meta name="description" content="みんなで登録・投票してつくる、日本の観光資源ランキング。47都道府県ごとのランキングと、各県No.1による全国ランキング。">
+  <meta name="description" content="みんなで写真と名所を登録・投票してつくる、日本の観光資源ランキング。47都道府県ごとのランキングと、各県No.1による全国ランキング。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://upload.wikimedia.org">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header" id="site-header">
     <div class="container header-inner">
-      <a href="#top" class="logo"><span class="logo-mark">日</span>ニッポン観光ランキング</a>
+      <a href="#top" class="logo"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m" d="M2 27 L13 9 Q16 5 19 9 L30 27 Z"/><path class="s" d="M11.6 11.3 L13 9 Q16 5 19 9 L20.4 11.3 L18.4 13 L16.8 11.6 L15 13.2 L13.4 11.8 Z"/></svg>ニッポン観光ランキング</a>
       <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-nav">
         <span></span><span></span><span></span>
       </button>
       <nav id="site-nav" class="site-nav">
+        <a href="#purpose">目的から探す</a>
         <a href="#national">全国No.1ランキング</a>
         <a href="#prefecture">都道府県別</a>
-        <a href="#register" class="nav-cta">名所を登録</a>
+        <a href="#register" class="nav-cta">写真と名所を投稿</a>
       </nav>
     </div>
   </header>
 
   <main id="top">
-    <!-- HERO -->
+    <!-- HERO: 全国上位の写真スライドショー -->
     <section class="hero">
-      <div class="hero-sun" aria-hidden="true"></div>
+      <img class="hero-photo" alt="新道峠から望む富士山と河口湖"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Mount_Fuji_and_Laka_Kawaguchi_from_Shindo_Pass.jpg/1920px-Mount_Fuji_and_Laka_Kawaguchi_from_Shindo_Pass.jpg"
+        srcset="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Mount_Fuji_and_Laka_Kawaguchi_from_Shindo_Pass.jpg/1280px-Mount_Fuji_and_Laka_Kawaguchi_from_Shindo_Pass.jpg 1280w,
+                https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Mount_Fuji_and_Laka_Kawaguchi_from_Shindo_Pass.jpg/1920px-Mount_Fuji_and_Laka_Kawaguchi_from_Shindo_Pass.jpg 1920w,
+                https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Mount_Fuji_and_Laka_Kawaguchi_from_Shindo_Pass.jpg/3840px-Mount_Fuji_and_Laka_Kawaguchi_from_Shindo_Pass.jpg 3840w"
+        sizes="100vw" fetchpriority="high">
+      <div class="hero-shade" aria-hidden="true"></div>
       <div class="container hero-inner">
         <p class="hero-eyebrow">47都道府県 × みんなの推し名所</p>
-        <h1 class="hero-title">あなたの「ここが一番」で、<br>日本の観光地図をつくろう。</h1>
-        <p class="hero-lead">好きな観光名所を自由に登録して、いいねで投票。都道府県ごとのランキングから、各県のNo.1同士が競う全国ランキングまで。自然・子ども連れ・デートなど、目的別に絞り込めます。</p>
+        <h1 class="hero-title"><span>あなたの「ここが一番」で、</span><span>日本の観光地図をつくろう。</span></h1>
+        <p class="hero-lead">好きな観光名所を写真つきで投稿して、いいねで投票。都道府県ごとのランキングから、各県のNo.1同士が競う全国ランキングまで。</p>
         <div class="hero-actions">
           <a href="#national" class="btn btn-primary">ランキングを見る</a>
-          <a href="#register" class="btn btn-ghost">名所を登録する</a>
+          <a href="#register" class="btn btn-glass">写真を投稿する</a>
         </div>
-        <dl class="hero-stats">
-          <div><dt>登録名所</dt><dd id="stat-spots">0</dd></div>
-          <div><dt>都道府県</dt><dd id="stat-prefs">0<small>/47</small></dd></div>
-          <div><dt>総いいね</dt><dd id="stat-likes">0</dd></div>
-        </dl>
       </div>
+      <p class="hero-caption">📷 新道峠から望む富士山と河口湖（山梨県）｜<a href="https://commons.wikimedia.org/wiki/File:Mount_Fuji_and_Laka_Kawaguchi_from_Shindo_Pass.jpg" target="_blank" rel="noopener">Alpsdake</a> / <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja" target="_blank" rel="noopener">CC BY-SA 4.0</a></p>
     </section>
+
+    <div class="stats-band">
+      <dl class="container hero-stats">
+        <div><dt>登録名所</dt><dd id="stat-spots">0</dd></div>
+        <div><dt>都道府県</dt><dd id="stat-prefs">0<small>/47</small></dd></div>
+        <div><dt>総いいね</dt><dd id="stat-likes">0</dd></div>
+      </dl>
+    </div>
 
     <!-- CATEGORY FILTER (sticky) -->
     <div class="filter-bar" id="filter-bar">
@@ -53,8 +65,20 @@
       </div>
     </div>
 
+    <!-- PURPOSE: カテゴリ写真カード -->
+    <section class="section" id="purpose">
+      <div class="container">
+        <header class="section-head">
+          <p class="section-eyebrow">Find by Purpose</p>
+          <h2 class="section-title">目的から探す</h2>
+          <p class="section-desc">各カテゴリでいちばん人気の名所の写真から、旅のテーマを選べます。</p>
+        </header>
+        <div class="purpose-grid" id="purpose-grid"></div>
+      </div>
+    </section>
+
     <!-- NATIONAL RANKING -->
-    <section class="section" id="national">
+    <section class="section section-alt" id="national">
       <div class="container">
         <header class="section-head">
           <p class="section-eyebrow">National Ranking</p>
@@ -62,43 +86,51 @@
           <p class="section-desc">各都道府県で最もいいねを集めた名所だけを集めて、全国で順位付け。<span id="national-filter-note"></span></p>
         </header>
         <div class="podium" id="national-podium"></div>
-        <ol class="national-list" id="national-list"></ol>
+        <div class="card-grid" id="national-list"></div>
         <div class="list-more"><button class="btn btn-ghost" id="national-more" hidden>すべて表示</button></div>
       </div>
     </section>
 
     <!-- PREFECTURE RANKING -->
-    <section class="section section-alt" id="prefecture">
+    <section class="section" id="prefecture">
       <div class="container">
         <header class="section-head">
           <p class="section-eyebrow">Prefecture Ranking</p>
           <h2 class="section-title">都道府県別ランキング</h2>
-          <p class="section-desc">地方を選んで、都道府県をタップ。気に入った名所には「いいね」で投票できます。</p>
+          <p class="section-desc">地方を選んで、都道府県をタップ。写真をタップすると詳しく見られます。</p>
         </header>
 
         <div class="region-tabs" id="region-tabs" role="tablist" aria-label="地方"></div>
         <div class="pref-grid" id="pref-grid"></div>
 
-        <div class="pref-ranking">
-          <div class="pref-ranking-head">
-            <h3 id="pref-title">—</h3>
-            <span id="pref-count" class="pref-count"></span>
-          </div>
-          <ol class="spot-list" id="pref-list"></ol>
-        </div>
+        <div class="pref-banner" id="pref-banner"></div>
+        <div class="card-grid" id="pref-list"></div>
       </div>
     </section>
 
     <!-- REGISTER -->
-    <section class="section" id="register">
+    <section class="section section-alt" id="register">
       <div class="container register-wrap">
         <header class="section-head">
-          <p class="section-eyebrow">Submit a Spot</p>
-          <h2 class="section-title">観光名所を登録する</h2>
-          <p class="section-desc">地元のとっておきも、定番の名所も大歓迎。登録した名所はすぐにランキングに反映されます。</p>
+          <p class="section-eyebrow">Share Your Photo</p>
+          <h2 class="section-title">写真と名所を投稿する</h2>
+          <p class="section-desc">あなたが撮った写真と一緒に、とっておきの名所を登録しましょう。登録するとすぐにランキングに反映されます。</p>
         </header>
 
         <form class="register-form" id="register-form" novalidate>
+          <div class="field">
+            <span class="field-label">写真 <span class="opt">任意・おすすめ</span></span>
+            <label class="dropzone" id="dropzone" for="f-photo">
+              <input id="f-photo" name="photo" type="file" accept="image/*">
+              <img id="photo-preview" alt="" hidden>
+              <span class="dropzone-text" id="dropzone-text">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg>
+                <strong>タップして写真を選ぶ</strong>
+                <small>またはここにドラッグ＆ドロップ（JPEG / PNG / WebP、15MBまで）</small>
+              </span>
+            </label>
+            <button type="button" class="link-btn" id="photo-clear" hidden>写真を取り消す</button>
+          </div>
           <div class="field">
             <label for="f-name">名所の名前 <span class="req">必須</span></label>
             <input id="f-name" name="name" type="text" maxlength="40" placeholder="例：白川郷" required>
@@ -115,13 +147,9 @@
             <label for="f-desc">おすすめポイント</label>
             <textarea id="f-desc" name="desc" rows="3" maxlength="120" placeholder="例：合掌造りの集落。冬のライトアップは必見！"></textarea>
           </div>
-          <div class="field">
-            <label for="f-img">画像URL <span class="opt">任意</span></label>
-            <input id="f-img" name="img" type="url" placeholder="https://...">
-          </div>
           <p class="form-error" id="form-error" role="alert"></p>
-          <button type="submit" class="btn btn-primary btn-block">この名所を登録する</button>
-          <p class="form-note">※ 登録内容・いいねはこのブラウザ内に保存されます。あなたが登録した名所は削除できます。</p>
+          <button type="submit" class="btn btn-primary btn-block" id="submit-btn">この名所を投稿する</button>
+          <p class="form-note">※ 投稿した名所と写真はサイトを訪れたすべての人に公開されます。人物が写った写真や、他人が撮影した写真の投稿はお控えください。投稿した端末からは、詳細画面で写真の変更や削除ができます。</p>
         </form>
       </div>
     </section>
@@ -129,15 +157,23 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p class="logo"><span class="logo-mark">日</span>ニッポン観光ランキング</p>
-      <p class="footer-note">初期表示の名所といいね数はサンプルデータです。</p>
-      <button class="link-btn" id="reset-data">データを初期状態に戻す</button>
+      <p class="logo"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m" d="M2 27 L13 9 Q16 5 19 9 L30 27 Z"/><path class="s" d="M11.6 11.3 L13 9 Q16 5 19 9 L20.4 11.3 L18.4 13 L16.8 11.6 L15 13.2 L13.4 11.8 Z"/></svg>ニッポン観光ランキング</p>
+      <p class="footer-note">初期登録の名所といいね数の初期値はサンプルデータです。サンプル写真は Wikipedia / Wikimedia Commons の自由ライセンス画像を使用しています（各写真の詳細画面から出典ページを確認できます）。</p>
     </div>
   </footer>
 
+  <!-- 詳細モーダル -->
+  <dialog class="modal" id="spot-modal" aria-labelledby="modal-title">
+    <div class="modal-inner" id="modal-body"></div>
+  </dialog>
+  <input type="file" accept="image/*" id="change-photo-input" hidden>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <!-- seed.js / photos.js はサーバーに接続できないときの予備表示用 -->
   <script src="seed.js"></script>
+  <script src="photos.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
