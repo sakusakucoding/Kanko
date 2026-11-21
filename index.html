@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ニッポン観光ランキング</title>
+  <meta name="description" content="みんなで登録・投票してつくる、日本の観光資源ランキング。47都道府県ごとのランキングと、各県No.1による全国ランキング。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="logo"><span class="logo-mark">日</span>ニッポン観光ランキング</a>
+      <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-nav" class="site-nav">
+        <a href="#national">全国No.1ランキング</a>
+        <a href="#prefecture">都道府県別</a>
+        <a href="#register" class="nav-cta">名所を登録</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-sun" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <p class="hero-eyebrow">47都道府県 × みんなの推し名所</p>
+        <h1 class="hero-title">あなたの「ここが一番」で、<br>日本の観光地図をつくろう。</h1>
+        <p class="hero-lead">好きな観光名所を自由に登録して、いいねで投票。都道府県ごとのランキングから、各県のNo.1同士が競う全国ランキングまで。自然・子ども連れ・デートなど、目的別に絞り込めます。</p>
+        <div class="hero-actions">
+          <a href="#national" class="btn btn-primary">ランキングを見る</a>
+          <a href="#register" class="btn btn-ghost">名所を登録する</a>
+        </div>
+        <dl class="hero-stats">
+          <div><dt>登録名所</dt><dd id="stat-spots">0</dd></div>
+          <div><dt>都道府県</dt><dd id="stat-prefs">0<small>/47</small></dd></div>
+          <div><dt>総いいね</dt><dd id="stat-likes">0</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- CATEGORY FILTER (sticky) -->
+    <div class="filter-bar" id="filter-bar">
+      <div class="container">
+        <p class="filter-label">カテゴリで絞り込む</p>
+        <div class="chips" id="category-chips" role="group" aria-label="カテゴリ絞り込み"></div>
+      </div>
+    </div>
+
+    <!-- NATIONAL RANKING -->
+    <section class="section" id="national">
+      <div class="container">
+        <header class="section-head">
+          <p class="section-eyebrow">National Ranking</p>
+          <h2 class="section-title">都道府県No.1 全国ランキング</h2>
+          <p class="section-desc">各都道府県で最もいいねを集めた名所だけを集めて、全国で順位付け。<span id="national-filter-note"></span></p>
+        </header>
+        <div class="podium" id="national-podium"></div>
+        <ol class="national-list" id="national-list"></ol>
+        <div class="list-more"><button class="btn btn-ghost" id="national-more" hidden>すべて表示</button></div>
+      </div>
+    </section>
+
+    <!-- PREFECTURE RANKING -->
+    <section class="section section-alt" id="prefecture">
+      <div class="container">
+        <header class="section-head">
+          <p class="section-eyebrow">Prefecture Ranking</p>
+          <h2 class="section-title">都道府県別ランキング</h2>
+          <p class="section-desc">地方を選んで、都道府県をタップ。気に入った名所には「いいね」で投票できます。</p>
+        </header>
+
+        <div class="region-tabs" id="region-tabs" role="tablist" aria-label="地方"></div>
+        <div class="pref-grid" id="pref-grid"></div>
+
+        <div class="pref-ranking">
+          <div class="pref-ranking-head">
+            <h3 id="pref-title">—</h3>
+            <span id="pref-count" class="pref-count"></span>
+          </div>
+          <ol class="spot-list" id="pref-list"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- REGISTER -->
+    <section class="section" id="register">
+      <div class="container register-wrap">
+        <header class="section-head">
+          <p class="section-eyebrow">Submit a Spot</p>
+          <h2 class="section-title">観光名所を登録する</h2>
+          <p class="section-desc">地元のとっておきも、定番の名所も大歓迎。登録した名所はすぐにランキングに反映されます。</p>
+        </header>
+
+        <form class="register-form" id="register-form" novalidate>
+          <div class="field">
+            <label for="f-name">名所の名前 <span class="req">必須</span></label>
+            <input id="f-name" name="name" type="text" maxlength="40" placeholder="例：白川郷" required>
+          </div>
+          <div class="field">
+            <label for="f-pref">都道府県 <span class="req">必須</span></label>
+            <select id="f-pref" name="pref" required></select>
+          </div>
+          <fieldset class="field">
+            <legend>カテゴリ <span class="req">1つ以上</span></legend>
+            <div class="check-chips" id="f-cats"></div>
+          </fieldset>
+          <div class="field">
+            <label for="f-desc">おすすめポイント</label>
+            <textarea id="f-desc" name="desc" rows="3" maxlength="120" placeholder="例：合掌造りの集落。冬のライトアップは必見！"></textarea>
+          </div>
+          <div class="field">
+            <label for="f-img">画像URL <span class="opt">任意</span></label>
+            <input id="f-img" name="img" type="url" placeholder="https://...">
+          </div>
+          <p class="form-error" id="form-error" role="alert"></p>
+          <button type="submit" class="btn btn-primary btn-block">この名所を登録する</button>
+          <p class="form-note">※ 登録内容・いいねはこのブラウザ内に保存されます。あなたが登録した名所は削除できます。</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="logo"><span class="logo-mark">日</span>ニッポン観光ランキング</p>
+      <p class="footer-note">初期表示の名所といいね数はサンプルデータです。</p>
+      <button class="link-btn" id="reset-data">データを初期状態に戻す</button>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="seed.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
