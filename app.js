@@ -535,8 +535,64 @@
     toast('削除しました');
   }
 
+  /* ====== お問い合わせ ====== */
+  function initContact() {
+    const f = $('#contact-form');
+    const err = $('#contact-error');
+    const btn = $('#contact-btn');
+    const msg = f.elements.message;
+    const updateCount = () => { $('#c-count').textContent = `${msg.value.length} / 2000`; };
+    msg.addEventListener('input', updateCount);
+
+    f.addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = f.elements.name.value.trim();
+      const email = f.elements.email.value.trim();
+      const topic = f.elements.topic.value;
+      const message = msg.value.trim();
+
+      if (!name) { err.textContent = 'お名前を入力してください。'; f.elements.name.focus(); return; }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.textContent = 'メールアドレスを正しく入力してください。'; f.elements.email.focus(); return; }
+      if (!topic) { err.textContent = 'お問い合わせの種類を選択してください。'; f.elements.topic.focus(); return; }
+      if (!message) { err.textContent = 'お問い合わせ内容を入力してください。'; msg.focus(); return; }
+      if (!f.elements.agree.checked) { err.textContent = '個人情報の取り扱いに同意のうえ送信してください。'; return; }
+      err.textContent = '';
+
+      // 人には見えない欄に入力がある＝ボット。送信したふりをして終了
+      if (f.elements.website.value) { showDone(); return; }
+      if (!sb) { err.textContent = '現在送信できません。時間をおいてお試しください。'; return; }
+
+      btn.disabled = true; btn.textContent = '送信中…';
+      try {
+        const { error } = await sb.rpc('submit_contact', { p_name: name, p_email: email, p_topic: topic, p_message: message });
+        if (error) throw error;
+        showDone();
+      } catch (ex) {
+        const m = String((ex && ex.message) || ex);
+        err.textContent = /rate limited/i.test(m)
+          ? '送信が混み合っています。少し時間をおいてもう一度お試しください。'
+          : '送信に失敗しました。入力内容と通信状況を確認して、もう一度お試しください。';
+      } finally {
+        btn.disabled = false; btn.textContent = '送信する';
+      }
+    });
+
+    function showDone() {
+      f.reset(); updateCount();
+      f.classList.add('sent');
+      $('#contact-done').hidden = false;
+      $('#contact-done').focus();
+    }
+    $('#contact-again').addEventListener('click', () => {
+      f.classList.remove('sent');
+      $('#contact-done').hidden = true;
+      f.elements.name.focus();
+    });
+  }
+
   /* ====== 起動 ====== */
   initForm();
+  initContact();
   bindEvents();
   (async () => {
     $('#stat-spots').textContent = '…';
