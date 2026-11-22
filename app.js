@@ -280,7 +280,10 @@
     const s = findSpot(state.modalId);
     if (!s) { if (modal.open) modal.close(); return; }
     let credit = '';
-    if (s.photo && s.credit) {
+    if (s.photo && s.credit && s.credit.artist) {
+      // Commons から直接選んだ写真：撮影者とライセンスを表示
+      credit = `写真：${esc(s.credit.artist)} / ${esc(s.credit.license || '')}（<a href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(s.credit.file)}" target="_blank" rel="noopener">Wikimedia Commons</a>）`;
+    } else if (s.photo && s.credit) {
       credit = `写真：<a href="https://ja.wikipedia.org/wiki/File:${encodeURIComponent(s.credit.file)}" target="_blank" rel="noopener">Wikimedia Commons</a>（Wikipedia「${esc(s.credit.page)}」より）`;
     } else if (s.photo && !s.isSeed) credit = isMine(s) ? '写真：あなたの投稿' : '写真：ユーザー投稿';
     $('#modal-body').innerHTML = `
