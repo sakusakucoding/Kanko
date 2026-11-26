@@ -1,0 +1,144 @@
+/* ===== 47都道府県スタンプラリー ===== */
+.site-nav a[aria-current="page"] { color: var(--ink); font-weight: 700; }
+
+.share-banner { background: var(--indigo); color: #fff; text-align: center; padding: 10px 16px; font-size: 14px; font-weight: 700; }
+.share-banner a { color: #fff; margin-left: 8px; }
+
+/* ---------- 進捗ヒーロー ---------- */
+.stamp-hero { background: linear-gradient(180deg, var(--sky), var(--bg)); padding: 56px 0 40px; }
+.stamp-hero-inner { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; }
+.stamp-title { font-family: "Noto Serif JP", serif; font-weight: 900; font-size: clamp(30px, 5vw, 52px); line-height: 1.25; margin: 0 0 14px; }
+.stamp-lead { margin: 0 0 18px; color: var(--ink-soft); max-width: 30em; }
+.hero-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.region-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #fff; background: var(--ink-c, var(--indigo)); }
+.progress-card { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 24px; box-shadow: var(--shadow); text-align: center; }
+.ring { position: relative; width: 180px; height: 180px; margin: 0 auto 8px; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 10; }
+.ring-bg { stroke: var(--bg-alt); }
+.ring-fg { stroke: var(--indigo); stroke-linecap: round; stroke-dasharray: 326.7; stroke-dashoffset: 326.7; transition: stroke-dashoffset 1s ease; }
+.ring-text { position: absolute; inset: 0; display: grid; place-content: center; line-height: 1; }
+.ring-text strong { font-size: 56px; font-weight: 900; color: var(--indigo); font-variant-numeric: tabular-nums; }
+.ring-text span { font-size: 15px; color: var(--ink-mute); margin-top: 4px; }
+.rank-title { margin: 4px 0 16px; font-family: "Noto Serif JP", serif; font-weight: 900; font-size: 20px; }
+.mini-stats { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; border-top: 1px solid var(--line); padding-top: 14px; }
+.mini-stats div + div { border-left: 1px solid var(--line); }
+.mini-stats dt { font-size: 11px; color: var(--ink-mute); }
+.mini-stats dd { margin: 0; font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; }
+@media (max-width: 760px) {
+  .stamp-hero { padding: 36px 0 28px; }
+  .stamp-hero-inner { grid-template-columns: 1fr; gap: 20px; }
+  .ring { width: 150px; height: 150px; }
+  .ring-text strong { font-size: 46px; }
+}
+
+/* ---------- スタンプ帳 ---------- */
+.region-block { margin-bottom: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 18px 18px 22px; box-shadow: var(--shadow); }
+.region-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.region-head h3 { margin: 0; font-size: 17px; display: flex; align-items: center; gap: 8px; }
+.region-head h3::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--ink-c); }
+.region-count { font-size: 13px; color: var(--ink-mute); font-variant-numeric: tabular-nums; }
+.region-count .done { color: var(--ink-c); font-weight: 900; }
+.stamp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 14px 10px; }
+.stamp {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  border: 0; background: none; padding: 4px 0; cursor: pointer; color: var(--ink);
+}
+.stamp-face {
+  position: relative; width: 92px; height: 92px; border-radius: 50%;
+  display: grid; place-items: center; text-align: center;
+  border: 2px dashed #cfc6b8; color: #b8afa3; background: var(--bg);
+  transition: transform .2s;
+}
+.stamp:hover .stamp-face { transform: scale(1.05); }
+.stamp:focus-visible { outline: none; }
+.stamp:focus-visible .stamp-face { outline: 3px solid var(--indigo); outline-offset: 3px; }
+.stamp-face .pn { font-family: "Noto Serif JP", serif; font-weight: 900; font-size: 19px; line-height: 1.1; }
+.stamp-face .sub { display: block; font-size: 10px; margin-top: 3px; letter-spacing: .05em; }
+.stamp-meta { font-size: 11px; color: var(--ink-mute); text-align: center; line-height: 1.35; min-height: 2.7em; max-width: 104px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.stamp-want { position: absolute; top: 2px; right: calc(50% - 50px); font-size: 14px; }
+@media (max-width: 480px) {
+  .region-block { padding: 14px 12px 18px; }
+  .stamp-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 6px; }
+  .stamp-face { width: 78px; height: 78px; }
+  .stamp-face .pn { font-size: 17px; }
+  .stamp.stamped .stamp-face .pn { font-size: 18px; }
+  .stamp-face .sub { font-size: 9px; }
+  .stamp-want { right: calc(50% - 42px); }
+}
+
+.stamp:not(.stamped) .stamp-face { opacity: .75; }
+
+/* 押されたスタンプ：地方ごとのインク色＋最初にイッタ観光地の写真・わずかな傾き・二重枠 */
+.stamp.stamped .stamp-face {
+  border: 3px solid var(--ink-c); color: #fff; overflow: hidden;
+  background: var(--ink-c);
+  box-shadow: inset 0 0 0 4px var(--ink-c), inset 0 0 0 5.5px rgba(255,255,255,.9), 0 3px 10px color-mix(in srgb, var(--ink-c) 35%, transparent);
+  transform: rotate(var(--rot, -8deg));
+}
+.stamp.stamped .stamp-face::before { /* 写真をインク色に染める */
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: var(--img, none) center / cover; filter: grayscale(1) contrast(1.15);
+  mix-blend-mode: multiply; opacity: .55;
+}
+.stamp.stamped .stamp-face > span { position: relative; z-index: 1; text-shadow: 0 1px 3px rgba(0,0,0,.35); }
+.stamp.stamped .stamp-face .pn { font-size: 21px; }
+.stamp.stamped:hover .stamp-face { transform: rotate(var(--rot, -8deg)) scale(1.05); }
+.stamp.stamped .stamp-face::after { /* かすれ（インクのムラ） */
+  content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none; z-index: 2;
+  background: radial-gradient(circle at 28% 72%, rgba(255,255,255,.35) 0 7%, transparent 8%),
+              radial-gradient(circle at 76% 22%, rgba(255,255,255,.3) 0 4%, transparent 5%);
+}
+.stamp.stamped .stamp-meta { color: var(--ink); font-weight: 700; }
+.stamp.new .stamp-face { animation: stampIn .55s cubic-bezier(.2,.9,.3,1.4); }
+@keyframes stampIn {
+  0% { transform: scale(2.2) rotate(-25deg); opacity: 0; }
+  60% { transform: scale(.92) rotate(var(--rot, -8deg)); opacity: 1; }
+  100% { transform: rotate(var(--rot, -8deg)); }
+}
+.region-complete { font-size: 11px; font-weight: 900; color: #fff; background: var(--ink-c); padding: 2px 10px; border-radius: 999px; margin-left: 6px; }
+
+/* ---------- 旅の記録 ---------- */
+.timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; max-width: 760px; }
+.timeline li { display: grid; grid-template-columns: 64px minmax(0,1fr) auto; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 8px; }
+.timeline .ph { width: 64px; height: 64px; border-radius: 10px; }
+.timeline .ph-initial { font-size: 24px; }
+.timeline strong { display: block; font-size: 15px; line-height: 1.4; }
+.timeline small { color: var(--ink-mute); font-size: 12px; }
+.timeline .kind { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.timeline .kind.went { background: #e3f6ec; color: #146b48; }
+.timeline .kind.want { background: #fff6d6; color: #8a5f00; }
+
+/* ---------- 旅人カード ---------- */
+.traveler-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 20px; }
+@media (max-width: 600px) { .traveler-card { padding: 18px 16px; } }
+.tc-row { display: flex; flex-direction: column; gap: 8px; }
+.tc-row > label, .tc-label { font-weight: 700; font-size: 14px; }
+.tc-help { margin: 0; font-size: 12px; color: var(--ink-mute); }
+.tc-inline { display: flex; gap: 8px; flex-wrap: wrap; }
+.tc-inline input { flex: 1 1 200px; min-width: 0; font: inherit; font-size: 16px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--ink); }
+.tc-inline input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+.id-chip { display: inline-flex; align-items: center; gap: 8px; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 18px; font-weight: 700; letter-spacing: .08em; background: var(--sky); color: var(--indigo); padding: 8px 14px; border-radius: 10px; }
+.code-box { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 17px; font-weight: 700; letter-spacing: .06em; background: #fff8e6; border: 1px dashed #e0a100; color: #6b4a00; padding: 10px 14px; border-radius: 10px; word-break: break-all; }
+.code-box.masked { color: transparent; text-shadow: 0 0 9px rgba(107,74,0,.6); user-select: none; }
+.tc-warn { margin: 0; font-size: 12px; color: #8a5f00; background: #fff6d6; padding: 8px 12px; border-radius: 8px; }
+.tc-sep { border: 0; border-top: 1px solid var(--line); margin: 0; }
+.btn-danger { background: none; border: 0; color: var(--ink-mute); text-decoration: underline; font-size: 13px; cursor: pointer; padding: 0; align-self: flex-start; }
+.btn-danger:hover { color: var(--accent); }
+
+/* ---------- 都道府県ダイアログ ---------- */
+.pref-dialog .modal-head { position: relative; padding: 22px 64px 14px 24px; border-bottom: 1px solid var(--line); }
+.pref-dialog .modal-head h3 { margin: 0; font-family: "Noto Serif JP", serif; font-size: 24px; }
+.pref-dialog .modal-head p { margin: 4px 0 0; font-size: 13px; color: var(--ink-mute); }
+.pref-dialog .modal-close { top: 14px; }
+.pref-spots { list-style: none; margin: 0; padding: 12px 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+.pref-spots li { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; align-items: center; padding: 8px; border: 1px solid var(--line); border-radius: 14px; }
+.pref-spots .ph { width: 88px; height: 72px; border-radius: 10px; }
+.pref-spots .ph-initial { font-size: 26px; }
+.pref-spots h4 { margin: 0 0 6px; font-size: 15px; line-height: 1.4; }
+.pref-spots .mark-btn { min-height: 34px; }
+.state-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+@media (max-width: 480px) { .pref-spots li { grid-template-columns: 64px minmax(0, 1fr); } .pref-spots .ph { width: 64px; height: 64px; } }
+
+.empty-note { text-align: center; color: var(--ink-mute); padding: 28px 16px; border: 1px dashed var(--line); border-radius: 14px; background: var(--surface); grid-column: 1 / -1; }
+.empty-note a { color: var(--accent); font-weight: 700; }

@@ -219,6 +219,29 @@ button { font: inherit; color: inherit; }
 .overlay .like-btn { background: rgba(255,255,255,.92); border-color: transparent; }
 @keyframes pop { 50% { transform: scale(1.15); } }
 
+/* ---------- イキタイ / イッタ ---------- */
+.spot-card .card-foot { flex-wrap: wrap; row-gap: 8px; }
+.mark-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.mark-btn {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 36px; padding: 0 10px;
+  border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+  font-size: 12px; font-weight: 700; cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.mark-btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.mark-btn b { font-variant-numeric: tabular-nums; font-weight: 700; opacity: .75; }
+.mark-btn.want:hover { border-color: #e0a100; color: #a87400; }
+.mark-btn.went:hover { border-color: #1f9d6a; color: #17805a; }
+.mark-btn.want.on { background: #fff6d6; border-color: #e0a100; color: #8a5f00; }
+.mark-btn.want.on svg { fill: #f2b705; stroke: #c48d00; }
+.mark-btn.went.on { background: #e3f6ec; border-color: #1f9d6a; color: #146b48; }
+.mark-btn.went.on svg { fill: #1f9d6a; stroke: #1f9d6a; }
+.mark-btn.went.on svg path { stroke: #fff; }
+.mark-btn.pop { animation: pop .3s; }
+.mark-btns.lg { gap: 10px; margin: 4px 0; }
+.mark-btns.lg .mark-btn { min-height: 46px; padding: 0 18px; font-size: 15px; flex: 1 1 0; justify-content: center; }
+.mark-btns.lg .mark-btn svg { width: 20px; height: 20px; }
+.toast a { color: #fff; margin-left: 6px; text-decoration: underline; }
+
 /* ---------- Region / prefecture ---------- */
 .region-tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 14px; padding: 2px; }
 .region-tabs::-webkit-scrollbar { display: none; }

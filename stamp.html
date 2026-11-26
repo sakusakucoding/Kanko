@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>47都道府県スタンプラリー｜ニッポン観光ランキング</title>
+  <meta name="description" content="行った観光地に「イッタ」を押すと、その都道府県のスタンプが押されるスタンプラリー。47都道府県の制覇をめざそう。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="stamp.css">
+</head>
+<body class="stamp-page">
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m" d="M2 27 L13 9 Q16 5 19 9 L30 27 Z"/><path class="s" d="M11.6 11.3 L13 9 Q16 5 19 9 L20.4 11.3 L18.4 13 L16.8 11.6 L15 13.2 L13.4 11.8 Z"/></svg>ニッポン観光ランキング</a>
+      <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-nav" class="site-nav">
+        <a href="index.html#national">全国No.1ランキング</a>
+        <a href="index.html#prefecture">都道府県別</a>
+        <a href="stamp.html" aria-current="page">スタンプラリー</a>
+        <a href="index.html#register" class="nav-cta">写真と名所を投稿</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- 共有表示のときのお知らせ -->
+    <div class="share-banner" id="share-banner" hidden></div>
+
+    <!-- 進捗 -->
+    <section class="stamp-hero">
+      <div class="container stamp-hero-inner">
+        <div class="hero-text">
+          <p class="section-eyebrow">Stamp Rally</p>
+          <h1 class="stamp-title">47都道府県<br>スタンプラリー</h1>
+          <p class="stamp-lead" id="stamp-lead">行った観光地の「イッタ」を押すと、その都道府県のスタンプが押されます。全国制覇をめざそう！</p>
+          <div class="hero-badges" id="hero-badges"></div>
+        </div>
+        <div class="progress-card">
+          <div class="ring" id="ring">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="ring-bg" cx="60" cy="60" r="52"/>
+              <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="52"/>
+            </svg>
+            <div class="ring-text"><strong id="stamp-count">0</strong><span>/ 47</span></div>
+          </div>
+          <p class="rank-title" id="rank-title">旅のはじまり</p>
+          <dl class="mini-stats">
+            <div><dt>イッタ</dt><dd id="went-total">0</dd></div>
+            <div><dt>イキタイ</dt><dd id="want-total">0</dd></div>
+            <div><dt>制覇した地方</dt><dd id="region-total">0</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- スタンプ帳 -->
+    <section class="section" id="book">
+      <div class="container">
+        <header class="section-head">
+          <p class="section-eyebrow">Stamp Book</p>
+          <h2 class="section-title">スタンプ帳</h2>
+          <p class="section-desc">都道府県をタップすると、その県の観光地が表示されます。どれか1か所に「イッタ」でスタンプGET。</p>
+        </header>
+        <div id="regions"></div>
+      </div>
+    </section>
+
+    <!-- イキタイ -->
+    <section class="section section-alt" id="want">
+      <div class="container">
+        <header class="section-head">
+          <p class="section-eyebrow">Wish List</p>
+          <h2 class="section-title">イキタイ リスト</h2>
+          <p class="section-desc" id="want-desc">「イキタイ」を押した観光地です。行ったら「イッタ」を押してスタンプを集めましょう。</p>
+        </header>
+        <div class="card-grid" id="want-list"></div>
+      </div>
+    </section>
+
+    <!-- 最近のイッタ -->
+    <section class="section" id="history">
+      <div class="container">
+        <header class="section-head">
+          <p class="section-eyebrow">Travel Log</p>
+          <h2 class="section-title">旅の記録</h2>
+        </header>
+        <ol class="timeline" id="timeline"></ol>
+      </div>
+    </section>
+
+    <!-- 旅人ID -->
+    <section class="section section-alt" id="traveler">
+      <div class="container register-wrap">
+        <header class="section-head">
+          <p class="section-eyebrow">Traveler ID</p>
+          <h2 class="section-title">旅人ID と引き継ぎ</h2>
+          <p class="section-desc">会員登録は不要です。最初に「イキタイ」か「イッタ」を押したとき、あなた専用の旅人IDが自動で作られます。</p>
+        </header>
+        <div class="traveler-card" id="traveler-card"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="logo"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m" d="M2 27 L13 9 Q16 5 19 9 L30 27 Z"/><path class="s" d="M11.6 11.3 L13 9 Q16 5 19 9 L20.4 11.3 L18.4 13 L16.8 11.6 L15 13.2 L13.4 11.8 Z"/></svg>ニッポン観光ランキング</p>
+      <p class="footer-note">サンプル写真は Wikipedia / Wikimedia Commons の自由ライセンス画像を使用しています。</p>
+    </div>
+  </footer>
+
+  <!-- 都道府県ごとの観光地 -->
+  <dialog class="modal pref-dialog" id="pref-dialog" aria-labelledby="pref-dialog-title">
+    <div class="modal-inner" id="pref-dialog-body"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="core.js"></script>
+  <script src="stamp.js"></script>
+</body>
+</html>

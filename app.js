@@ -1,44 +1,15 @@
 (() => {
   'use strict';
 
-  /* ====== Supabase 接続設定（公開用キー：ブラウザに置いてよい値） ====== */
-  const SUPABASE_URL = 'https://gmiwgvjyfberzxugolce.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_ez5I5H9SXdKbFMCBEIKCwQ_98nAD8kg';
-  const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false } }) : null;
-  const photoPublicURL = path => `${SUPABASE_URL}/storage/v1/object/public/photos/${path}`;
-
-  /* ====== マスターデータ ====== */
-  const REGIONS = [
-    { name: '北海道・東北', prefs: ['北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県'] },
-    { name: '関東', prefs: ['茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県'] },
-    { name: '中部', prefs: ['新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県'] },
-    { name: '近畿', prefs: ['三重県', '滋賀県', '京都府', '大阪府', '兵庫県', '奈良県', '和歌山県'] },
-    { name: '中国・四国', prefs: ['鳥取県', '島根県', '岡山県', '広島県', '山口県', '徳島県', '香川県', '愛媛県', '高知県'] },
-    { name: '九州・沖縄', prefs: ['福岡県', '佐賀県', '長崎県', '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県'] },
-  ];
-  const PREFS = REGIONS.flatMap(r => r.prefs);
-
-  const CATEGORIES = [
-    { id: 'nature',   label: '自然',          icon: '🌲', color: '#2f7d4f', copy: '森・湖・渓谷で深呼吸' },
-    { id: 'kids',     label: '子ども・家族',  icon: '🧸', color: '#e08a1e', copy: '動物園・水族館・テーマパーク' },
-    { id: 'date',     label: 'デート',        icon: '💕', color: '#d24a74', copy: '夜景と街歩きでふたり旅' },
-    { id: 'history',  label: '歴史・文化',    icon: '⛩️', color: '#8a3b2e', copy: 'お城・神社・古い町並み' },
-    { id: 'scenic',   label: '絶景',          icon: '🌅', color: '#3b5fa8', copy: '一度は見たいあの景色' },
-    { id: 'onsen',    label: '温泉',          icon: '♨️', color: '#b1543a', copy: '名湯でゆったり癒やされる' },
-    { id: 'gourmet',  label: 'グルメ',        icon: '🍜', color: '#a0761b', copy: 'ご当地の味を食べ歩き' },
-    { id: 'activity', label: 'アクティビティ', icon: '🚣', color: '#18808a', copy: '体を動かして遊びつくす' },
-  ];
-  const CAT = Object.fromEntries(CATEGORIES.map(c => [c.id, c]));
+  /* ====== 共通コード（core.js）：接続設定・マスターデータ・旅人ID ====== */
+  const {
+    sb, photoPublicURL, REGIONS, PREFS, CATEGORIES, CAT, store, uuid,
+    loadSpots, Traveler, markButtons,
+  } = window.KankoCore;
 
   /* ====== この端末だけの情報（localStorage） ======
      voterId : いいねを「端末ごとに1回」にするためのランダムID
      owned   : 自分が投稿した名所の削除用トークン { spotId: token } */
-  const store = {
-    get(key) { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } },
-    set(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} },
-  };
-  const uuid = () => (crypto.randomUUID ? crypto.randomUUID()
-    : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16; return (c === 'x' ? r : (r & 3) | 8).toString(16); }));
   const randomToken = () => [...crypto.getRandomValues(new Uint8Array(24))].map(b => b.toString(16).padStart(2, '0')).join('');
 
   let voterId = store.get('kanko.voterId');
@@ -51,25 +22,9 @@
   let liked = new Set();
   let online = false;
 
-  const fromRow = r => ({
-    id: r.id, pref: r.pref, name: r.name, cats: r.cats || [], desc: r.descr || '', likes: r.likes,
-    createdAt: Date.parse(r.created_at) || 0, isSeed: r.is_seed,
-    photo: r.photo_path ? photoPublicURL(r.photo_path) : (r.photo_url || ''),
-    credit: r.photo_path ? null : r.photo_credit,
-  });
-
   async function loadFromServer() {
-    if (!sb) throw new Error('supabase-js not loaded');
-    const all = [];
-    for (let from = 0; ; from += 1000) {
-      const { data, error } = await sb.from('spots')
-        .select('id,pref,name,cats,descr,photo_path,photo_url,photo_credit,likes,is_seed,created_at')
-        .range(from, from + 999);
-      if (error) throw error;
-      all.push(...data);
-      if (data.length < 1000) break;
-    }
-    spots = all.map(fromRow);
+    spots = await loadSpots();
+    Traveler.load().then(() => { renderNational(); renderPrefRanking(); if (state.modalId) renderModal(); }).catch(() => {});
     const { data: mine, error: e2 } = await sb.rpc('my_likes', { p_voter: voterId });
     if (!e2 && mine) liked = new Set(mine.map(x => (typeof x === 'string' ? x : x.my_likes)));
     online = true;
@@ -88,7 +43,7 @@
         if (i > 0) likes = Math.max(1, likes - (3 + hash(name) % 9));
         const p = photos[`${pref}|${name}`];
         spots.push({ id: `seed-${pref}-${i}`, pref, name, cats: [...codes].map(c => CODE[c]), desc, likes, createdAt: 0, isSeed: true,
-          photo: p ? p.src : '', credit: p || null });
+          photo: p ? p.src : '', credit: p || null, wantCount: 0, wentCount: 0 });
       });
     }
     online = false;
@@ -156,7 +111,7 @@
           <h4>${esc(s.name)}</h4>
           ${tags(s)}
           ${s.desc ? `<p>${esc(s.desc)}</p>` : ''}
-          <div class="card-foot"><span></span>${likeBtn(s)}</div>
+          <div class="card-foot">${markButtons(s)}${likeBtn(s)}</div>
         </div>
       </article>`;
   }
@@ -293,6 +248,7 @@
         <h3 id="modal-title">${esc(s.name)}</h3>
         ${tags(s)}
         ${s.desc ? `<p>${esc(s.desc)}</p>` : ''}
+        ${markButtons(s, { size: 'lg' })}
         <div class="modal-meta">${likeBtn(s)}<span class="credit">${credit}</span></div>
         ${isMine(s) && online ? `<div class="modal-actions">
           <button class="btn btn-ghost btn-sm" data-change-photo="${esc(s.id)}">📷 ${s.photo ? '写真を変更' : '写真を追加'}</button>
@@ -389,7 +345,7 @@
         if (error) throw error;
         newId = data;
         owned[newId] = token; saveOwned();
-        spots.push({ id: newId, pref, name, cats, desc, likes: 0, createdAt: Date.now(), isSeed: false,
+        spots.push({ id: newId, pref, name, cats, desc, likes: 0, wantCount: 0, wentCount: 0, createdAt: Date.now(), isSeed: false,
           photo: path ? photoPublicURL(path) : '', credit: null });
       } catch (ex) {
         err.textContent = serverErrorMessage(ex);
@@ -414,11 +370,44 @@
 
   /* ====== イベント ====== */
   let toastTimer;
-  function toast(msg) {
+  function toast(msg, link) {
     const t = $('#toast');
-    t.textContent = msg; t.classList.add('show');
+    t.textContent = msg;
+    if (link) {
+      const a = document.createElement('a');
+      a.href = link.href; a.textContent = link.label + ' →';
+      t.append(' ', a);
+    }
+    t.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+    toastTimer = setTimeout(() => t.classList.remove('show'), link ? 4500 : 2600);
+  }
+
+  /* ====== イキタイ / イッタ ====== */
+  const markBusy = new Set();
+  async function toggleMark(s, kind) {
+    if (!online) { toast('現在サーバーに接続できないため記録できません'); return; }
+    const key = s.id + kind;
+    if (markBusy.has(key)) return;
+    markBusy.add(key);
+    const prefHadStamp = kind === 'went' && spots.some(x => x.pref === s.pref && Traveler.has(x.id, 'went'));
+    try {
+      const r = await Traveler.toggle(s.id, kind);
+      s.wantCount = r.want_count; s.wentCount = r.went_count;
+      renderNational(); renderPrefRanking();
+      if (state.modalId) renderModal();
+      document.querySelectorAll(`[data-mark="${kind}"][data-spot="${CSS.escape(s.id)}"]`).forEach(b => b.classList.add('pop'));
+      if (kind === 'went' && r.active) {
+        const n = new Set(spots.filter(x => Traveler.has(x.id, 'went')).map(x => x.pref)).size;
+        toast(prefHadStamp ? `イッタ！ ${s.name}を記録しました` : `🎉 ${s.pref}のスタンプGET！（${n}/47）`, { href: 'stamp.html', label: 'スタンプ帳' });
+      } else if (kind === 'want' && r.active) {
+        toast(`「${s.name}」をイキタイに追加しました`, { href: 'stamp.html#want', label: '一覧' });
+      }
+    } catch {
+      toast('記録できませんでした。通信状況を確認してください');
+    } finally {
+      markBusy.delete(key);
+    }
   }
 
   const likeBusy = new Set();
@@ -455,6 +444,9 @@
 
   function bindEvents() {
     document.addEventListener('click', e => {
+      const mark = e.target.closest('[data-mark]');
+      if (mark) { const s = findSpot(mark.dataset.spot); if (s) toggleMark(s, mark.dataset.mark); return; }
+
       const like = e.target.closest('[data-like]');
       if (like) { const s = findSpot(like.dataset.like); if (s) toggleLike(s); return; }
 
